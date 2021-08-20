@@ -1,6 +1,6 @@
 # ignore .DS_Store file for Mac OS
 .DS_Store
-# ignore Jupyter notebook file
+# ignore all Jupyter notebook file
 *.ipynb
 # ignore files in __pycache__ folder
 __pycache__/
