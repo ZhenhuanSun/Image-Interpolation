@@ -1,5 +1,13 @@
+"""
+    Image Interpolation Class
+        - Nearest Neighbour Interpolation
+        - Bilinear Interpolation
+        - Bicubic Interpolation
+    Arthor: Zhenhuan(Steven) Sun
+"""
+
 import numpy as np
-import cv2
+import cv2 # only for loading image and showing image
 
 class interpolation():
     def __init__(self, image_path, scale=1):
@@ -17,20 +25,89 @@ class interpolation():
         # the amount of scale
         self.scale = scale
 
-    # resize image using bilinear interpolation
-    def bilinear(self):
-        """Bilinear Interpoalation"""
+    # resize image using nearest neighbour interpolation
+    def nearest_neighbour(self):
+        """
+            Nearest Neighbour Interpolation
+        """
+        print("Nearest Neighbour Interpolation:")
+
         # empty list to store each resized rgb channel
         image_rgb = []
+
+        rgb = "bgr"
+
+        # perform nearest neighbour interpolation for color channel
+        for i in range(3):
+            print("\tInterpolating {} channel...".format(rgb[i]))
+            image_channel = self.image[:, :, i]
+
+            # pre-allcoate space for output image in current color channel
+            # make sure the data type is unsigned integer 8 since only uint8 data type are accepted in image file
+            image_channel_output = np.zeros((self.resized_image_width, self.resized_image_height), dtype=np.uint8)
+
+            # interpolate image pixel by pixel
+            for x in range(self.resized_image_width):
+                # compute the corresponding x position in the original image
+                x_ori = (x / self.resized_image_width) * self.image_width
+
+                # the amount of interpolation in x axis(eg: x_ori=1.5, then x_interp=0.5, 0.5 from x=1)
+                x_interp = x_ori - np.floor(x_ori)
+
+                # find the nearest neighbour of current x
+                if x_interp < 0.5:
+                    x_int = int(np.floor(x_ori))
+                else:
+                    x_int = int(np.ceil(x_ori))
+                    # if x_int is out of bound force it back inbound
+                    if x_int >= self.image_width:
+                        x_int = int(np.floor(x_ori))
+
+                for y in range(self.resized_image_height):
+                    # compute the corresponding y position in the original image
+                    y_ori = (y / self.resized_image_height) * self.image_height
+
+                    # the amount of interpolation in y axis
+                    y_interp = y_ori - np.floor(y_ori)
+
+                    # find the nearest neighbour of current y
+                    if y_interp < 0.5:
+                        y_int = int(np.floor(y_ori))
+                    else:
+                        y_int = int(np.ceil(y_ori))
+                        # if y_int is out of bound force it back inbound
+                        if y_int >= self.image_height:
+                            y_int = int(np.floor(y_ori))
+
+                    image_channel_output[x][y] = image_channel[x_int][y_int]
+
+            # insert resized rgb channel image matrix into a list
+            image_rgb.append(image_channel_output)
+
+        # merge 3 image color channel into a image
+        image_rgb_output = cv2.merge((image_rgb[0], image_rgb[1], image_rgb[2]))
+        print("Completed\n")
+
+        return image_rgb_output         
+
+    # resize image using bilinear interpolation
+    def bilinear(self):
+        """
+            Bilinear Interpoalation
+        """
+        print("Bilinear Interpolation:")
+
+        # empty list to store each resized rgb channel
+        image_rgb = []
+
+        rgb = "bgr"
 
         B = np.array([[0, 1], [1, 1]])
         B_inv = np.linalg.inv(B) # since B is symmetric matrix B_inv = B_inv_T
 
-        rgb = "rgb"
-
         # perform bilinear interpolation for color channel
         for i in range(3):
-            print("Bilinear interpolating {} channel...".format(rgb[i]))
+            print("\tInterpolating {} channel...".format(rgb[i]))
             image_channel = self.image[:, :, i]
 
             # pre-allcoate space for output image in current color channel
@@ -81,7 +158,7 @@ class interpolation():
 
                     # if the program find that the interpolated point can be found in the original image matrix
                     # eg: (x_ori, y_ori) = (x, y) = (0, 0)
-                    # then there is no need to perform bicubic interpolation for that point
+                    # then there is no need to perform bilinear interpolation for that point
                     # we can simply copy the pixel value of that point from original image to scaled image
                     if x_interp==0.0 and y_interp==0.0:
                         # there should always be (orginal image width * original image height) times we can copy pixel value like this
@@ -114,14 +191,18 @@ class interpolation():
         
         # merge 3 image color channel into a image
         image_rgb_output = cv2.merge((image_rgb[0], image_rgb[1], image_rgb[2]))
-        print("Completed")
+        print("Completed\n")
 
         return image_rgb_output
 
 
     # resize image using bicubic interpolation
     def bicubic(self):
-        """Bicubic Interpolation"""
+        """
+            Bicubic Interpolation
+        """
+        print("Bicubic Interpolation:")
+
         # empty list to store each resized rgb channel
         image_rgb = []
 
@@ -129,11 +210,11 @@ class interpolation():
         B_inv = np.linalg.inv(B)
         B_inv_T = B_inv.T 
 
-        rgb = "rgb"
+        rgb = "bgr"
 
         # perform bicubic interpolation for each color channel
         for i in range(3):
-            print("Bicubic interpolating {} channel...".format(rgb[i]))
+            print("\tInterpolating {} channel...".format(rgb[i]))
             image_channel = self.image[:, :, i]
 
             # pre-allcoate space for output image in current color channel
@@ -229,13 +310,6 @@ class interpolation():
         
         # merge 3 image color channel into a image
         image_rgb_output = cv2.merge((image_rgb[0], image_rgb[1], image_rgb[2]))
-        print("Completed")
+        print("Completed\n")
 
         return image_rgb_output
-
-
-interp = interpolation(image_path="./Image/man.png", scale=10)
-resized_image = interp.bicubic()
-cv2.imshow("resized image", resized_image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
