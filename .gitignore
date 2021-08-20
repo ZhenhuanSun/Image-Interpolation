@@ -1,4 +1,2 @@
-# ignore .DS_Store file for Mac OS
 .DS_Store
-# ignore all jupyter notebook file
-*.ipynb
+.ipynb
