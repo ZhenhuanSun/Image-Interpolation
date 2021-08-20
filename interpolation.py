@@ -83,6 +83,7 @@ class interpolation():
 
             # insert resized rgb channel image matrix into a list
             image_rgb.append(image_channel_output)
+            print("\t\tCompleted")
 
         # merge 3 image color channel into a image
         image_rgb_output = cv2.merge((image_rgb[0], image_rgb[1], image_rgb[2]))
@@ -188,6 +189,7 @@ class interpolation():
             
             # insert resized rgb channel image matrix into a list
             image_rgb.append(image_channel_output)
+            print("\t\tCompleted")
         
         # merge 3 image color channel into a image
         image_rgb_output = cv2.merge((image_rgb[0], image_rgb[1], image_rgb[2]))
@@ -307,6 +309,7 @@ class interpolation():
             
             # insert resized rgb channel image matrix into a list
             image_rgb.append(image_channel_output)
+            print("\t\tCompleted")
         
         # merge 3 image color channel into a image
         image_rgb_output = cv2.merge((image_rgb[0], image_rgb[1], image_rgb[2]))

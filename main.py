@@ -8,7 +8,7 @@ from interpolation import interpolation
 import cv2
 import numpy as np
 
-interp = interpolation(image_path="./Image/man.png", scale=10)
+interp = interpolation(image_path="./Image/color.png", scale=5)
 
 # resize image using different interpolation method
 resized_image_nn = interp.nearest_neighbour()
