@@ -11,9 +11,9 @@ import numpy as np
 interp = interpolation(image_path="./Image/color.png", scale=5)
 
 # resize image using different interpolation method
-resized_image_nn = interp.nearest_neighbour()
-resized_image_bilinear = interp.bilinear()
-resized_image_bicubic = interp.bicubic()
+resized_image_nn = interp.nearest_neighbour()   # nearest neighbour interpolation
+resized_image_bilinear = interp.bilinear()      # bilinear interpolation
+resized_image_bicubic = interp.bicubic()        # bicubic interpolation
 
 # stack image matrix horizontally in order to show 3 images in one window
 image = np.hstack((resized_image_nn, resized_image_bilinear, resized_image_bicubic))
