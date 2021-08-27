@@ -297,13 +297,13 @@ class interpolation():
                         # bicubic interpolation
                         interpolated_value = X.dot(B_inv).dot(F_interp).dot(B_inv_T).dot(Y)
 
-                        # after bicubic interpolation between adjacent pixels, floating point value will be retured
+                        # after bicubic interpolation between adjacent pixels, floating point value will be returned
                         # instead of usigned integer 8. We need to clamp the value between 0 and 255 in order to show
                         # image matrix as an image
                         if interpolated_value < 0:
                             interpolated_value = 0
                         elif interpolated_value > 255:
-                            interpolated_value=255
+                            interpolated_value = 255
 
                         image_channel_output[x][y] = interpolated_value
             
