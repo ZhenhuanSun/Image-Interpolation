@@ -9,7 +9,7 @@
 import numpy as np
 import cv2 # only for loading image and showing image
 
-class interpolation:
+class Interpolation:
     def __init__(self, image_path, scale=1):
         # load image to numpy array
         self.image = cv2.imread(image_path)

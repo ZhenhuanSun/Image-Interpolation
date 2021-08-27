@@ -4,11 +4,11 @@
 """
 
 # from interpolation module import interpolation class
-from interpolation import interpolation
+from interpolation import Interpolation
 import cv2
 import numpy as np
 
-interp = interpolation(image_path="./Image/color.png", scale=5)
+interp = Interpolation(image_path="./Image/color.png", scale=5)
 
 # resize image using different interpolation method
 resized_image_nn = interp.nearest_neighbour()   # nearest neighbour interpolation
